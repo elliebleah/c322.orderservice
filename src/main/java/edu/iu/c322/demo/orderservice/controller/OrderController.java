@@ -4,6 +4,7 @@ import edu.iu.c322.demo.orderservice.model.Order;
 import edu.iu.c322.demo.orderservice.model.OrderItem;
 import edu.iu.c322.demo.orderservice.repository.OrderRepository;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,6 +40,21 @@ public class OrderController {
     @GetMapping("/order/{orderId}")
     public Optional<Order> findByOrderId(@PathVariable int orderId){
         return repository.findById(orderId);
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PutMapping("/{id}")
+    public void update(@Validated @RequestBody Order order, @PathVariable int id){
+        order.setId(id);
+        repository.save(order);
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable int id){
+        Order order = new Order();
+        order.setId(id);
+        repository.delete(order);
     }
 
 }
